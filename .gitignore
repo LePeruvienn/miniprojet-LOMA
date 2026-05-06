@@ -1,12 +1,15 @@
 build
 bin
 .cache/
+.vs
+.vscode
 
 # CMake
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
 compile_commands.json
+CMakeSettings.json
 
 # Executables
 *.exe
