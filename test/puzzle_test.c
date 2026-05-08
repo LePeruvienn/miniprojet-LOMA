@@ -25,7 +25,7 @@ int main()
     int size;
 
     // read seconde ligne of puzzle (taille)
-    sscanf(line, "%d", &size);
+    int scan = sscanf(line, "%d", &size);
 
     puzzle p = create_puzzle(size);
 

@@ -24,11 +24,11 @@ static const letter _ = EMPTY;
 puzzle create_puzzle(int size);
 void free_puzzle(puzzle p);
 
-void print_puzzle(puzzle p);
+//void print_puzzle(puzzle p);
 void print_letter(letter l);
 
-letter get_constraint(edge e, unsigned int i);
-letter get_letter(unsigned int i, unsigned int j);
+//letter get_constraint(edge e, unsigned int i);
+//letter get_letter(unsigned int i, unsigned int j);
 void load_top_from_file(puzzle p, FILE* f);
 void load_left_from_file(puzzle p, FILE* f);
 void load_right_from_file(puzzle p, FILE* f);

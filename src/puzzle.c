@@ -25,6 +25,10 @@ puzzle create_puzzle(int size)
 	// grid
 	p->grille = malloc(size * sizeof(char*));
 
+	if (p->grille == NULL) {
+		return NULL;
+	}
+
 	for (int i = 0; i < size; i++) {
 		p->grille[i] = malloc(size * sizeof(char));
 	}
