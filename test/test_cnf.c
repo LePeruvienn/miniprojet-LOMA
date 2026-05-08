@@ -23,9 +23,9 @@ letter data[] = {
 	_, _, _, _, _,
 };
 
-var get_letter_pos_var(letter l, unsigned int x, unsigned int y)
+var get_var_from_letter_pos(letter l, unsigned int x, unsigned int y)
 {
-	unsigned int let_offset = l * width * height;
+	unsigned int let_offset = (l * width * height) + 1; // +1 cause lit 0 is CLAUSE_END
 	unsigned int pos_offset = (y * height) + x;
 
 	return let_offset + pos_offset;
@@ -48,7 +48,7 @@ int main()
 		{
 			for (unsigned int x = 0; x < width; ++x)
 			{
-				rows_lits[x] = get_letter_pos_var(l, x, y);
+				rows_lits[x] = get_var_from_letter_pos(l, x, y);
 			}
 			
 			atLeastOne(c, rows_lits, width);
@@ -59,7 +59,7 @@ int main()
 		{
 			for (unsigned int y = 0; y < height; ++y)
 			{
-				cols_lits[y] = get_letter_pos_var(l, x, y);
+				cols_lits[y] = get_var_from_letter_pos(l, x, y);
 			}
 
 			atLeastOne(c, cols_lits, height);

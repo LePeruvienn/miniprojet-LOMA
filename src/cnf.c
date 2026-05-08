@@ -8,23 +8,24 @@
 
 #define CLAUSE_END 0
 
-#define CHECK_CLAUSE_ENDED(c, ret)                \
-	if (c->nb_clauses != 0 && get_last_lit(c) == CLAUSE_END)            \
-	{                                             \
-		LOG_ERROR("CHECK_CLAUSE_ENDED FAILED!");  \
-		return ret;                               \
+#define CHECK_CLAUSE_ENDED(c, ret)                            \
+	if (c->nb_lits != 0 && get_last_lit(c) != CLAUSE_END)  \
+	{                                                         \
+		LOG_ERROR("CHECK_CLAUSE_ENDED FAILED!");              \
+		return ret;                                           \
 	}
 
-#define CHECK_CLAUSE_NOT_ENDED(c, ret)            \
-	if (get_last_lit(c) != CLAUSE_END)            \
-	{                                             \
+#define CHECK_CLAUSE_NOT_ENDED(c, ret)                \
+	if (get_last_lit(c) == CLAUSE_END)                \
+	{                                                 \
 		LOG_ERROR("CHECK_CLAUSE_NOT_ENDED FAILED!");  \
-		return ret;                               \
+		return ret;                                   \
 	}
 
 struct cnf
 {
 	unsigned int nb_vars;
+	unsigned int nb_lits;
 	unsigned int nb_clauses;
 	unsigned int clauses_size;
 
@@ -38,7 +39,7 @@ cnf create_cnf()
 	cnf c = malloc(sizeof(struct cnf));
 
 	c->nb_vars = 0;
-	c->nb_clauses = 0;
+	c->nb_lits = 0;
 
 	c->clauses_size = default_clauses_size;
 	c->clauses = malloc(sizeof(lit) * c->clauses_size);
@@ -50,7 +51,7 @@ cnf create_cnf_from_puzzle(puzzle p)
 {
 	cnf c = malloc(sizeof(struct cnf));
 
-	c->nb_clauses = 0;
+	c->nb_lits = 0;
 	c->nb_vars = 0;
 	c->clauses = NULL;
 	
@@ -59,16 +60,20 @@ cnf create_cnf_from_puzzle(puzzle p)
 
 void realloc_if_needed(cnf c, unsigned int size)
 {
-	if(c->clauses_size < c->nb_clauses + size)
+	if(c->clauses_size < c->nb_lits + size)
 	{
-		void* ptr = realloc(c->clauses, (c->clauses_size + default_clauses_size + size) * sizeof(lit));
+		unsigned int new_size = c->clauses_size + default_clauses_size + size;
+
+		void* ptr = realloc(c->clauses, new_size * sizeof(lit));
 
 		if (ptr == NULL)
 		{
+			LOG_ERROR("MALLOC FAILED");
 			return;
 		}
 
 		c->clauses = ptr;
+		c->clauses_size = new_size;
 	}
 }
 
@@ -79,7 +84,7 @@ lit get_last_lit(cnf c)
 		return CLAUSE_END;
 	}
 
-	return c->clauses[c->clauses_size - 1];
+	return c->clauses[c->nb_lits - 1];
 }
 
 void add_clause(cnf c, lit* ls, unsigned int size)
@@ -90,18 +95,16 @@ void add_clause(cnf c, lit* ls, unsigned int size)
 
 	for(unsigned int i = 0; i < size; i++)
 	{
-		c->clauses[c->nb_clauses++] = ls[i];
+		c->clauses[c->nb_lits++] = ls[i];
 	}
 
-	c->clauses[c->nb_clauses++] = CLAUSE_END;
+	c->clauses[c->nb_lits++] = CLAUSE_END;
 }
 
 void add_lit(cnf c, lit l)
 {
-	CHECK_CLAUSE_ENDED(c, );
-
 	realloc_if_needed(c, 1);
-	c->clauses[c->nb_clauses++] = l;
+	c->clauses[c->nb_lits++] = l;
 }
 
 void end_clause(cnf c)
@@ -110,7 +113,8 @@ void end_clause(cnf c)
 
 	realloc_if_needed(c, 1);
 
-	c->clauses[c->nb_clauses++] = CLAUSE_END;
+	c->clauses[c->nb_lits++] = CLAUSE_END;
+	++c->nb_clauses;
 }
 
 void atLeastOne(cnf c, lit* ls, unsigned int size)
@@ -160,13 +164,13 @@ void print_cnf(cnf c)
 {
 	printf("cnf %d %d\n", c->nb_vars, c->nb_clauses);
 
-	for (unsigned int i = 0; i < c->nb_clauses; i++)
+	for (unsigned int i = 0; i < c->nb_lits; i++)
 	{
 		lit l = c->clauses[i];
 
 		print_lit(l);
 		
-		if(l == CLAUSE_END || i == c->nb_clauses)
+		if(l == CLAUSE_END || i == c->nb_lits)
 		{
 			printf("\n");
 		}

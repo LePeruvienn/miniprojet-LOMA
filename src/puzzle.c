@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "puzzle.h"
 
 struct puzzle
@@ -128,7 +129,7 @@ void load_bottom_from_file(puzzle p, FILE* f)
 {
 	char line[256];
 	init_file(f, 3 + p->size);
-	int fin_atteinte = 0;
+	// int fin_atteinte = 0;
 
 	// read third line
 	if (fgets(line, sizeof(line), f)) {
@@ -154,7 +155,7 @@ void load_grid_from_file(puzzle p, FILE* f)
 
 	for (int i = 0; i < p->size; i++) { // pour chaque ligne 
 		if (fgets(line, sizeof(line), f)) {// next ligne
-			int len = strlen(line);
+			// int len = strlen(line);
 			for (int j = 0; j < p->size; j++) {// next usefull charchacter
 				p->grille[i][j] = line[(j * 2) + 1];
 			}

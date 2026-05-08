@@ -1,40 +1,46 @@
 #include "solver.h"
-
-#include <stdlib.h>
+#include "logger.h"
 
 struct solver
 {
-	char* dimacs_filepath;
-	solver_status status;
+	cnf c;
+
+	unsigned int global_width;
+	unsigned int global_height;
+
+	unsigned int width;
+	unsigned int height;
 };
 
-
-solver solver_create(cnf c, char* dimacs_filepath)
+/*
+var get_var_from_letter_pos(solver s, letter l, unsigned int x, unsigned int y)
 {
-	solver s = malloc(sizeof(struct solver));
+	if (x > s->width || y > s->height)
+	{
+		LOG_ERROR("Les valeurs de x ou y sont trop grande !");
+		return 0;
+	}
 
-	s->dimacs_filepath = dimacs_filepath;
-	s->status = NOT_READY;
+	unsigned int let_offset = (l * s->width * s->height) + 1; // +1 cause lit 0 is CLAUSE_END
+	unsigned int pos_offset = (y * s->height) + x;
 
-	return s;
+	return let_offset + pos_offset;
 }
+*/
 
-void solver_free(solver s)
+/*
+letter_pos get_letter_pos_from_var(solver s, var v)
 {
-	free(s);
-}
+	// NOTE: First we are using a 1 first index based system for our modulo (%) computations
 
-void solver_run(solver s)
-{
+	unsigned int pos_buf_size = s->width * s->height; // The position "buffer" size for each letter
+	unsigned int pos = pos_buf_size - (v % (pos_buf_size)) // With 1 the first case, and 9 the last
 
-}
+	unsigned int x = s->height - (pos % s->height);
 
-const char* get_dimacs_filepath(solver s)
-{
-	return s->dimacs_filepath;
-}
+	unsigned int let_offset = (l * s->width * s->height) + 1; // +1 cause lit 0 is CLAUSE_END
+	unsigned int pos_offset = (y * s->height) + x;
 
-solver_status get_solver_status(solver s)
-{
-	return s->status;
+	return let_offset + pos_offset;
 }
+*/

@@ -21,7 +21,7 @@ typedef enum
 
 static const letter _ = EMPTY;
 
-puzzle create_puzzle(char* puzzle_path);
+puzzle create_puzzle(int size);
 void free_puzzle(puzzle p);
 
 void print_puzzle(puzzle p);

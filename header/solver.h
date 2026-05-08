@@ -1,24 +1,24 @@
+/*
+* Je faisais ça mais si tu comprend ou si tu veut juste faire vsy au pire
+*/
+
 #ifndef SOLVER_H
 #define SOLVER_H
 
+#include "puzzle.h"
 #include "cnf.h"
 
 typedef struct solver* solver;
 
-typedef enum
+typedef struct 
 {
-	NOT_READY, READY,
-	ERROR, FILE_ERROR,
-	SAT, UNSAT
+	letter l;
+	unsigned int x;
+	unsigned int y;
 
-} solver_status;
+} letter_pos;
 
-solver solver_create(cnf c, char* dimacs_filepath);
-void solver_free(solver s);
-
-void solver_run(solver s);
-
-const char* get_dimacs_filepath(solver s);
-solver_status get_solver_status(solver s);
+var get_var_from_letter_pos(solver s, letter l, unsigned int x, unsigned int y);
+letter_pos get_letter_pos_from_var(solver s, var v);
 
 #endif // SOLVER_H
