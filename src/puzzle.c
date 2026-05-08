@@ -219,3 +219,45 @@ void display_grid(puzzle p)
 		printf("\n");
 	}
 }
+
+void load_puzzle(const char* filepath)
+{
+	FILE* f = fopen(filepath, "r");
+
+	if (f == NULL) {
+		printf("Erreur fichier\n");
+		return;
+	}
+
+	char line[100];
+
+	// Lire la première ligne (souvent inutile mais conservée comme ton main)
+	if (fgets(line, sizeof(line), f) == NULL) {
+		printf("Fichier vide\n");
+		fclose(f);
+		return;
+	}
+
+	// Lire la ligne de taille
+	if (fgets(line, sizeof(line), f) == NULL) {
+		printf("Erreur lecture taille\n");
+		fclose(f);
+		return;
+	}
+
+	int size;
+	(void)sscanf(line, "%d", &size); // (void) enleve le warning 
+
+	puzzle p = create_puzzle(size);
+
+	load_top_from_file(p, f);
+	load_left_from_file(p, f);
+	load_right_from_file(p, f);
+	load_bottom_from_file(p, f);
+	load_grid_from_file(p, f);
+
+	display_bords(p);
+	display_grid(p);
+
+	fclose(f);
+}
