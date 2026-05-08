@@ -20,7 +20,7 @@ int main()
     int taille = 0;
     int n; 
 
-    while (fscanf_s(f, "%d", &n) == 1) {
+    while (fscanf(f, "%d", &n) == 1) {
         if (n > 0) {
             int* temp = realloc(liste, (taille + 1) * sizeof(int));
 
