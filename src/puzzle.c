@@ -166,6 +166,11 @@ void load_grid_from_file(puzzle p, FILE* f)
 	}
 }
 
+void insert_letter(puzzle p, int ligne, int collum, char letter) {
+
+	p->grille[ligne][collum] = letter;
+}
+
 void init_file(FILE* f, int ligne_to_skip)
 {
 	char tmp[256];

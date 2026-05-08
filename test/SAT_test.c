@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <puzzle.h>
 
 int main()
 {
@@ -31,23 +32,26 @@ int main()
         }
     }
 
-    printf("Nombres positifs (%d) : ", taille);
-    for (int i = 0; i < taille; i++)
-        printf("%d ", liste[i]);
-    printf("\n");
-
-
+    fclose(f);
 
     // create puzzle 
+    puzzle p = create_puzzle(3);
 
     // for each num possitif 
-    //      read ligne of problem dot cnf 
-    //      get what letter it is 
-    //      put the correct letter in puzzle 
+    for (int i = 0; i < taille; i++) {
+        int v = liste[i] - 1;
+        // get what letter it is 
+        int lettre = v % 3;
+        int cellule = v / 3;
+        int ligne = cellule / 3;
+        int colonne = cellule % 3;
+
+        // put the correct letter in puzzle 
+        insert_letter(p, ligne, colonne, 'A' + lettre);
+    }
+
     // afficher puzzle 
+    display_grid(p);
 
-
-
-    fclose(f);
     return 0;
 }

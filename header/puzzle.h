@@ -35,6 +35,7 @@ void load_right_from_file(puzzle p, FILE* f);
 void load_bottom_from_file(puzzle p, FILE* f);
 void load_grid_from_file(puzzle p, FILE* f);
 void init_file(FILE* f, int ligne_to_skip);
+void insert_letter(puzzle p, int ligne, int collum, char letter);
 void display_bords(puzzle p);
 void display_grid(puzzle p);
 
