@@ -9,7 +9,7 @@ compile: $(BUILD)
 	cmake --build $(BUILD)
 
 $(BUILD):
-	cmake -B $(BUILD)
+	cmake -B $(BUILD) -DCMAKE_BUILD_TYPE=Debug
 
 clean:
 	rm -rf $(BUILD) $(BIN)
