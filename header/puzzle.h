@@ -38,6 +38,6 @@ void init_file(FILE* f, int ligne_to_skip);
 void insert_letter(puzzle p, int ligne, int collum, char letter);
 void display_bords(puzzle p);
 void display_grid(puzzle p);
-void load_puzzle(const char* filepath);
+puzzle load_puzzle(const char* filepath);
 
 #endif // PUZZLE_H

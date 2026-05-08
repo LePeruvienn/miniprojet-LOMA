@@ -4,6 +4,9 @@
 
 int main()
 {
-    load_puzzle("../input/puzzle3.data");
+    puzzle p = load_puzzle("../input/puzzle3.data");
+
+    display_bords(p);
+    display_grid(p);
     return 0;
 }

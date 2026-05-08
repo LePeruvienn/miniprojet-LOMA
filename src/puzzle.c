@@ -220,13 +220,13 @@ void display_grid(puzzle p)
 	}
 }
 
-void load_puzzle(const char* filepath)
+puzzle load_puzzle(const char* filepath)
 {
 	FILE* f = fopen(filepath, "r");
 
 	if (f == NULL) {
 		printf("Erreur fichier\n");
-		return;
+		return NULL;
 	}
 
 	char line[100];
@@ -235,14 +235,14 @@ void load_puzzle(const char* filepath)
 	if (fgets(line, sizeof(line), f) == NULL) {
 		printf("Fichier vide\n");
 		fclose(f);
-		return;
+		return NULL;
 	}
 
 	// Lire la ligne de taille
 	if (fgets(line, sizeof(line), f) == NULL) {
 		printf("Erreur lecture taille\n");
 		fclose(f);
-		return;
+		return NULL;
 	}
 
 	int size;
@@ -256,8 +256,7 @@ void load_puzzle(const char* filepath)
 	load_bottom_from_file(p, f);
 	load_grid_from_file(p, f);
 
-	display_bords(p);
-	display_grid(p);
-
 	fclose(f);
+
+	return p;
 }
