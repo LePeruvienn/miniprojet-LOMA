@@ -33,6 +33,7 @@ int main()
     load_left_from_file(p, f);
     load_right_from_file(p, f);
     load_bottom_from_file(p, f);
+    load_grid_from_file(p, f);
 
     display_bords(p);
     display_grid(p);

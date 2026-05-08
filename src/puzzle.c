@@ -5,7 +5,7 @@
 struct puzzle
 {
 	int size;
-	char* bords[4];// TOP, BOTTOM, RIGHT, LEFT
+	char* bords[4];// TOP, BOTTOM, RIGHT, LEFT using emun "edge"
 	char** grille;
 };
 
@@ -132,17 +132,12 @@ void load_grid_from_file(puzzle p, FILE* f)
 {
 	char line[256];
 	init_file(f, 3);
-	for (int i = 0; i < p->size; i++) {
-		if (fgets(line, sizeof(line), f)) {
+
+	for (int i = 0; i < p->size; i++) { // pour chaque ligne 
+		if (fgets(line, sizeof(line), f)) {// next ligne
 			int len = strlen(line);
-			for (int j = 0; j < p->size; j++) {
-				int index = (j * 2) + 2; // skip border char + space
-				if (index >= len || line[index] == '\n') {
-					p->grille[i][j] = ' ';
-				}
-				else {
-					p->grille[i][j] = line[index];
-				}
+			for (int j = 0; j < p->size; j++) {// next usefull charchacter
+				p->grille[i][j] = line[(j * 2) + 1];
 			}
 		}
 	}
