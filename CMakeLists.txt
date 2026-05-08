@@ -7,7 +7,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 if(MSVC)
 	# Pas de warning sur windows c'est trop chiant
-	# add_compile_options(/W4 /WX)
+	add_compile_options(/W3 /WX)
 else()
 	add_compile_options(-Wall -Werror)
 endif()

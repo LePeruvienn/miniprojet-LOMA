@@ -4,7 +4,7 @@
 
 int main()
 {
-    FILE* f = fopen("../input/puzzle.data", "r");
+    FILE* f = fopen("../input/puzzle3.data", "r");
 
     if (f == NULL) {
         printf("Erreur fichier\n");

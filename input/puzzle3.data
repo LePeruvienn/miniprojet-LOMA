@@ -1,9 +1,10 @@
 #Puzzle
-5
-       B
-EA . . . .
-E. . . . C
-C. . A . .
-A. . . . .
-A. . . . .
-   A
+6
+ C B A F D E
+C. . . . . .E
+D. . . . . .C
+ . . . . . .F
+F. E . . C .D
+ . . . . F .
+B. . . . . .A
+ B   D C E A

@@ -133,15 +133,14 @@ void load_bottom_from_file(puzzle p, FILE* f)
 {
 	char line[256];
 	init_file(f, 3 + p->size);
-	// int fin_atteinte = 0;
 
 	// read third line
 	if (fgets(line, sizeof(line), f)) {
-		int longeur_ligne = strlen(line);
+		size_t longeur_ligne = strlen(line);
 
 		for (int j = 0; j < p->size; j++) {
 			int index = (j * 2) + 1; // Saute un espace
-			if (index + 1 > longeur_ligne) { // check if end of ligne
+			if ((index + 1) > longeur_ligne) { // check if end of ligne
 				p->bords[BOTTOM][j] = ' ';
 			}
 			else {
