@@ -110,7 +110,7 @@ void display_solution(sat sat)
     printf("Solution: \n");
     for (int i = 0; i < sat->size; i++) {
         for (int j = 0; j < sat->size; j++) {
-            print_letter(sat->solution[i][j]);
+            print_letter(sat->solution[j][i]); // Flipped j & i or else the print will be flipped
             printf(" ");
         }
         printf("\n");

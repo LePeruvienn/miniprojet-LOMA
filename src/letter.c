@@ -1,40 +1,36 @@
 #include "letter.h"
 #include <stdio.h>
 
+letter get_letter(char c)
+{
+	if (c >= 'A' && c <= 'Z')
+	{
+		return (letter) (c - 'A' + 1);
+	}
+
+	return EMPTY;
+}
+
 void print_letter(letter l)
 {
-	switch (l)
+	if (l >= A && l <= Z)
 	{
-		case A: printf("A"); break;
-		case B: printf("B"); break;
-		case C: printf("C"); break;
-		case D: printf("D"); break;
-		case E: printf("E"); break;
-		case F: printf("F"); break;
-		case G: printf("G"); break;
-		case H: printf("H"); break;
-		case I: printf("I"); break;
-		case J: printf("J"); break;
-
-		case EMPTY: printf("EMPTY"); break;
+		printf("%c", 'A' + (l - 1));
+	} 
+	else
+	{
+		printf("EMPTY");
 	}
 }
 
 void fprint_letter(FILE* f, letter l)
 {
-	switch (l)
+	if (l >= A && l <= Z)
 	{
-		case A: fprintf(f, "A"); break;
-		case B: fprintf(f, "B"); break;
-		case C: fprintf(f, "C"); break;
-		case D: fprintf(f, "D"); break;
-		case E: fprintf(f, "E"); break;
-		case F: fprintf(f, "F"); break;
-		case G: fprintf(f, "G"); break;
-		case H: fprintf(f, "H"); break;
-		case I: fprintf(f, "I"); break;
-		case J: fprintf(f, "J"); break;
-
-		case EMPTY: fprintf(f, "EMPTY"); break;
+		fprintf(f, "%c", 'A' + (l - 1));
+	} 
+	else
+	{
+		fprintf(f, "EMPTY");
 	}
 }

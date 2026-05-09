@@ -60,7 +60,7 @@ void make_cnf(solver s)
 	lit* lits_rows_tmp = malloc(sizeof(lit) * puzzle_size);
 	lit* lits_cols_tmp = malloc(sizeof(lit) * puzzle_size);
 
-	// vvv EXACTEMENT UNE SEUL LIGNE PAR COLONNE ET LIGNE !
+	// 1. EXACTEMENT UNE SEUL LETTER LIGNE PAR COLONNE ET LIGNE !
 	for (letter l = 1; l <= letter_amount; ++l)  // On commence à 1 car 0 == EMPTY on ne veut pas que des cases soit vide!
 	{
 		// Dans chaque ligne et coll
@@ -82,7 +82,7 @@ void make_cnf(solver s)
 
 	lit* lits_case_tmp = malloc(sizeof(lit) * letter_amount);
 
-	// EXACTEMENT 1 SEUL LETTER PAR CASE
+	// 2. EXACTEMENT 1 SEUL LETTER PAR CASE
 	for (int i = 0; i < puzzle_size; ++i)
 	{
 		for (int j = 0; j < puzzle_size; ++j)
@@ -94,6 +94,57 @@ void make_cnf(solver s)
 			}
 
 			exactlyOne(c, lits_case_tmp, letter_amount);
+		}
+	}
+
+	// 3. REGLES POUR LES BORDS
+	for (edge e = 0; e < 4; ++e) // de 0 à 4 car il y a 4 edges
+	{
+		char* border = get_bord(p, e);
+
+		for (int i = 0; i < puzzle_size; ++i)
+		{
+			letter l = get_letter(border[i]);
+		
+			if (l == EMPTY) continue;
+		
+			unsigned int x;
+			unsigned int y;
+
+			switch (e)
+			{
+				case TOP: x = i; y = 0;
+					break;
+
+				case BOTTOM: x = i; y = puzzle_size - 1;
+					break;
+
+				case LEFT: x = 0; y = i;
+					break;
+
+				case RIGHT: x = puzzle_size - 1; y = i;
+					break;
+			}
+	
+			var v = get_var_from_letter_pos(l, x, y, puzzle_size);
+			add_lit(c, v);
+			end_clause(c);
+		}
+	}
+
+	// 4. Regles pour les lettre déjà placer dans le puzzle
+	char** puzzle_content = get_grille(p);
+	for (unsigned int i = 0; i < puzzle_size; ++i)
+	{
+		for (unsigned int j = 0; j < puzzle_size; ++j)
+		{
+			letter l = get_letter(puzzle_content[j][i]); // Flipped i & j cause else it dont work 
+
+			if (l == EMPTY) continue;
+
+			var v = get_var_from_letter_pos(l, i, j, puzzle_size);
+			add_lit(c, v);
+			end_clause(c);
 		}
 	}
 

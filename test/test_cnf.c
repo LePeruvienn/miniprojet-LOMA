@@ -1,17 +1,24 @@
 #include "solver.h"
 #include "sat.h"
 
-char* puzzle_path = "input/puzzle4.data";
+char* puzzle_path = "input/puzzle3.data";
 char* dimacs_path = "input/problem.cnf";
 
-int main()
+int main(int argc, char** argv)
 {
+	if (argc == 2)
+	{
+		puzzle_path = argv[1];
+	}
+
 	puzzle p = load_puzzle(puzzle_path);
 
 	if (p == NULL)
 	{
 		return 1;
 	}
+
+	print_puzzle(p);
 	
 	int puzzle_size = get_size(p);
 

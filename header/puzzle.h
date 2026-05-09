@@ -7,8 +7,8 @@ typedef struct puzzle* puzzle;
 
 typedef enum
 {
-	TOP, BOTTOM,
-	RIGHT, LEFT
+	TOP = 0, BOTTOM = 1,
+	RIGHT = 2, LEFT = 3
 
 } edge;
 
@@ -29,5 +29,7 @@ void load_grid_from_file(puzzle p, FILE* f);
 void init_file(FILE* f, int ligne_to_skip);
 void display_bords(puzzle p);
 puzzle load_puzzle(const char* filepath);
+
+void print_puzzle(puzzle p);
 
 #endif // PUZZLE_H

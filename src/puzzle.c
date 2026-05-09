@@ -245,3 +245,58 @@ puzzle load_puzzle(const char* filepath)
 
 	return p;
 }
+
+void print_puzzle(puzzle p)
+{
+	printf("Puzzle size = %d\n", p->size);
+
+	char* top = p->bords[TOP];
+	char* bot = p->bords[BOTTOM];
+	char* left = p->bords[LEFT];
+	char* right = p->bords[RIGHT];
+	char** grille = p->grille;
+
+	printf("    ");
+	for (int j = 0; j < p->size; j++)
+	{
+		printf("%c ", top[j] == 0 ? '.' : top[j]);
+	}
+
+	printf("\n    ");
+
+	for (int j = 0; j < p->size; j++)
+	{
+		printf("- ");
+	}
+
+	printf("\n");
+
+	for (int i = 0; i < p->size; i++)
+	{
+		printf("%c | ", left[i] == 0 ? '.' : left[i]);
+
+		for (int j = 0; j < p->size; j++)
+		{
+			char c = grille[i][j];
+			printf("%c ", c == 0 ? ' ' : c);
+		}
+
+		printf("| %c\n", right[i] == 0 ? '.' : right[i]);
+	}
+
+	printf("    ");
+
+	for (int j = 0; j < p->size; j++)
+	{
+		printf("- ");
+	}
+
+	printf("\n    ");
+
+	for (int j = 0; j < p->size; j++)
+	{
+		printf("%c ", bot[j] == 0 ? '.' : bot[j]);
+	}
+
+	printf("\n");
+}

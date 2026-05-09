@@ -3,8 +3,8 @@ c This is glucose 4.2.1 --  based on MiniSAT (Many thanks to MiniSAT team)
 c
 c ========================================[ Problem Statistics ]===========================================
 c |                                                                                                       |
-c |  Number of variables:            36                                                                   |
-c |  Number of clauses:             108                                                                   |
+c |  Number of variables:           150                                                                   |
+c |  Number of clauses:             825                                                                   |
 c |  Parse time:                   0.00 s                                                                 |
 c |                                                                                                       |
 c | Preprocesing is fully done
@@ -29,7 +29,7 @@ c |                                                                             
 c |          RESTARTS           |          ORIGINAL         |              LEARNT              | Progress |
 c |       NB   Blocked  Avg Cfc |    Vars  Clauses Literals |   Red   Learnts    LBD2  Removed |          |
 c =========================================================================================================
-c last restart ## conflicts  :  0 4 
+c last restart ## conflicts  :  0 0 
 c =========================================================================================================
 c restarts              : 1 (0 conflicts in avg)
 c blocked restarts      : 0 (multiple: 0) 
@@ -41,11 +41,11 @@ c nb learnts DL2        : 0
 c nb learnts size 2     : 0
 c nb learnts size 1     : 0
 c conflicts             : 0              (0 /sec)
-c decisions             : 5              (0.00 % random) (3305 /sec)
-c propagations          : 27             (17845 /sec)
+c decisions             : 1              (0.00 % random) (242 /sec)
+c propagations          : 125            (30222 /sec)
 c nb reduced Clauses    : 0
 c LCM                   : 0 / 0 
-c CPU time              : 0.001513 s
+c CPU time              : 0.004136 s
 
 s SATISFIABLE
 SAT
