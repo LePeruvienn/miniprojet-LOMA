@@ -1,4 +1,5 @@
 #include "sat.h"
+#include "letter_pos.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +9,7 @@ struct sat
     int s; // -1 not sat / 0 not computed / 1 sat
     int size;
     int* result; // the result.txt file 
-    char** solution; // the solution
+    letter** solution; // the solution
 };
 
 sat create_sat(int size)
@@ -62,7 +63,7 @@ int* get_result(sat sat)
     return sat->result;
 }
 
-char** get_solution(sat sat)
+letter** get_solution(sat sat)
 {
     return sat->solution;
 }
@@ -90,7 +91,6 @@ void display_result(sat sat)
 
     printf("Result :\n");
     for (int i = 0; i < (sat->size * sat->size) ; i++) {
-        int v = sat->result[i] - 1;
         printf(" %d ", sat->result[i]);
     }
     printf("\n");
@@ -110,7 +110,8 @@ void display_solution(sat sat)
     printf("Solution: \n");
     for (int i = 0; i < sat->size; i++) {
         for (int j = 0; j < sat->size; j++) {
-            printf("%c ", sat->solution[i][j]);
+            print_letter(sat->solution[i][j]);
+            printf(" ");
         }
         printf("\n");
     }
@@ -128,9 +129,9 @@ void run_glucose(const char* glucose, const char* input, const char* out) {
     // system("wsl /home/maxence/sat/glucose/simp/glucose ../input/problem.cnf > ../out/satisfaisable.txt ../out/result.txt");
 }
 
-void insert_letter(sat sat, int ligne, int collum, char letter) {
+void insert_letter(sat sat, letter_pos lp) {
 
-    sat->solution[ligne][collum] = letter;
+    sat->solution[lp.x][lp.y] = lp.l;
 }
 
 void read_result_build_solution(sat sat, char* out_dir) {
@@ -164,13 +165,15 @@ void read_result_build_solution(sat sat, char* out_dir) {
     fclose(f);
 
     for (int i = 0; i < taille; i++) {
-        int v = sat->result[i] - 1;
 
-        int lettre = v % 3;
-        int cellule = v / 3;
-        int ligne = cellule / 3;
-        int colonne = cellule % 3;
+        lit v = sat->result[i];
 
-        insert_letter(sat, ligne, colonne, 'A' + lettre);
+        if (v < 0)
+        {
+            continue;
+        }
+
+        letter_pos lp = get_letter_pos_from_var(v, sat->size);
+        insert_letter(sat, lp);
     }
 }

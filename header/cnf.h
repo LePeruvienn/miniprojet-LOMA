@@ -33,6 +33,8 @@ typedef int lit;
 cnf create_cnf();
 cnf create_cnf_from_puzzle(puzzle p);
 
+void cnf_set_nb_vars(cnf c, unsigned int nb_vars);
+
 lit get_last_lit(cnf c);
 
 void add_clause(cnf c, lit* ls, unsigned int size);
@@ -44,6 +46,7 @@ void atMostOne(cnf c, lit* ls, unsigned int size);
 void exactlyOne(cnf c, lit* ls, unsigned int size);
 
 void print_cnf(cnf c);
+void fprint_cnf(FILE* str, cnf c);
 
 void free_cnf(cnf c);
 

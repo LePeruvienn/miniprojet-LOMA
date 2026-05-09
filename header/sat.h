@@ -2,6 +2,7 @@
 #define sat_H
 
 #include "cnf.h"
+#include "letter_pos.h"
 
 typedef struct sat* sat;
 
@@ -11,7 +12,7 @@ int get_status(sat sat);
 void set_status(sat sat, int s);
 int* get_result(sat sat);
 void set_result(sat sat, int* result);
-char** get_solution(sat sat);
+letter** get_solution(sat sat);
 void display_solution(sat sat);
 void display_result(sat sat);
 
@@ -33,7 +34,7 @@ void display_result(sat sat);
  * run_glucose(glucose_path, "../input", "../out");
  */
 void run_glucose(const char* glucose, const char* input, const char* out);
-void insert_letter(sat sat, int ligne, int collum, char letter);
+void insert_letter(sat sat, letter_pos lp);
 
 /*
  * read_result_build_solution

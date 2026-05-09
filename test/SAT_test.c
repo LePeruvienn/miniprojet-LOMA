@@ -9,7 +9,7 @@ int main()
 
     sat sat = create_sat(3);
 
-    run_glucose("wsl /home/maxence/sat/glucose/simp/glucose", "../input", "../out");
+    run_glucose("glucose", "../input", "../out");
 
     read_result_build_solution(sat, "../out");
     display_result(sat);

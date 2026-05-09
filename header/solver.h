@@ -6,19 +6,16 @@
 #define SOLVER_H
 
 #include "puzzle.h"
-#include "cnf.h"
 
 typedef struct solver* solver;
 
-typedef struct 
-{
-	letter l;
-	unsigned int x;
-	unsigned int y;
+solver create_solver(puzzle p);
+solver create_solver_for(char* path);
 
-} letter_pos;
+void make_cnf(solver s);
 
-var get_var_from_letter_pos(solver s, letter l, unsigned int x, unsigned int y);
-letter_pos get_letter_pos_from_var(solver s, var v);
+void write_dimacs(solver s, char* outpath);
+void print_dimacs(solver s);
+
 
 #endif // SOLVER_H

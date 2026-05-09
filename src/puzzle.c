@@ -10,12 +10,12 @@ struct puzzle
 	char** grille;
 };
 
-int get_size(const struct puzzle* p)
+int get_size(puzzle p)
 {
 	return p->size;
 }
 
-char* get_bord(puzzle p, enum edge e)
+char* get_bord(puzzle p, edge e)
 {
 	return p->bords[e];
 }
@@ -54,25 +54,6 @@ puzzle create_puzzle(int size)
 	}
 
 	return p;
-}
-
-void print_letter(letter l)
-{
-	switch (l)
-	{
-		case A: printf("A");
-		case B: printf("B");
-		case C: printf("C");
-		case D: printf("D");
-		case E: printf("E");
-		case F: printf("F");
-		case G: printf("G");
-		case H: printf("H");
-		case I: printf("I");
-		case J: printf("J");
-
-		case EMPTY: printf("_");
-	}
 }
 
 void free_puzzle(puzzle p)

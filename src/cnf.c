@@ -40,6 +40,7 @@ cnf create_cnf()
 
 	c->nb_vars = 0;
 	c->nb_lits = 0;
+	c->nb_clauses = 0;
 
 	c->clauses_size = default_clauses_size;
 	c->clauses = malloc(sizeof(lit) * c->clauses_size);
@@ -75,6 +76,11 @@ void realloc_if_needed(cnf c, unsigned int size)
 		c->clauses = ptr;
 		c->clauses_size = new_size;
 	}
+}
+
+void cnf_set_nb_vars(cnf c, unsigned int nb_vars)
+{
+	c->nb_vars = nb_vars;
 }
 
 lit get_last_lit(cnf c)
@@ -150,33 +156,28 @@ void exactlyOne(cnf c, lit* ls, unsigned int size)
 	atMostOne(c, ls, size);
 }
 
-void print_lit(lit l)
-{
-	if (l < 0)
-	{
-		printf("-");
-	}
-
-	printf("%d", l);
-}
-
 void print_cnf(cnf c)
 {
-	printf("cnf %d %d\n", c->nb_vars, c->nb_clauses);
+	fprint_cnf(stdout, c);
+}
+
+void fprint_cnf(FILE* str, cnf c)
+{
+	fprintf(str, "p cnf %d %d\n", c->nb_vars, c->nb_clauses);
 
 	for (unsigned int i = 0; i < c->nb_lits; i++)
 	{
 		lit l = c->clauses[i];
 
-		print_lit(l);
+		fprintf(str, "%d", l);
 		
 		if(l == CLAUSE_END || i == c->nb_lits)
 		{
-			printf("\n");
+			fprintf(str, "\n");
 		}
 		else 
 		{
-			printf(" ");
+			fprintf(str, " ");
 		}
 	}
 }

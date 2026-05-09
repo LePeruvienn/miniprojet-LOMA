@@ -12,23 +12,13 @@ typedef enum
 
 } edge;
 
-typedef enum
-{
-	EMPTY = 0,
-	A, B, C, D, E, F, G, H, I, J
-
-} letter;
-
-static const letter _ = EMPTY;
-
 puzzle create_puzzle(int size);
 void free_puzzle(puzzle p);
-void print_letter(letter l);
 
 //letter get_constraint(edge e, unsigned int i);
 //letter get_letter(unsigned int i, unsigned int j);
 int get_size(puzzle p);
-char* get_bord(puzzle p, enum edge e);
+char* get_bord(puzzle p, edge e);
 char** get_grille(puzzle p);
 char get_cell(puzzle p, int row, int col);
 void load_top_from_file(puzzle p, FILE* f);
