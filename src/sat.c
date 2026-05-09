@@ -1,7 +1,176 @@
-/*
-* MAXENCE TODO
-*/
-
 #include "sat.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
+struct sat
+{
+    int s; // -1 not sat / 0 not computed / 1 
+    int size; // -1 not sat / 0 not computed / 1 sat
+    int* result; // the result.txt file 
+    char** solution; // the solution
+};
+
+sat create_sat(int size)
+{
+    sat sat = malloc(sizeof(struct sat));
+
+    if (sat == NULL) {
+        return NULL;
+    }
+
+    sat->s = 0;
+    sat->size = size; 
+    sat->result = NULL;
+
+    sat->solution = malloc(size * sizeof(char*));
+
+    if (sat->solution == NULL) {
+        free(sat);
+        return NULL;
+    }
+
+    for (int i = 0; i < size; i++) {
+        sat->solution[i] = malloc(size * sizeof(char));
+    }
+
+    return sat;
+}
+
+void free_sat(sat sat)
+{
+    for (int i = 0; i < sat->size; i++) {
+        free(sat->solution[i]);
+    }
+
+    free(sat->solution);
+
+    if (sat->result != NULL) {
+        free(sat->result);
+    }
+
+    free(sat);
+}
+
+int get_status(sat sat)
+{
+    return sat->s;
+}
+
+int* get_result(sat sat)
+{
+    return sat->result;
+}
+
+char** get_solution(sat sat)
+{
+    return sat->solution;
+}
+
+void set_status(sat sat, int s)
+{
+    sat->s = s;
+}
+
+void set_result(sat sat, int* result)
+{
+    sat->result = result;
+}
+
+void display_result(sat sat)
+{
+    if (sat->result == 0) {
+        printf("Not computed yet.\n");
+        return;
+    }
+    if (sat->s == -1) {
+        printf("UNSATISFIABLE\n");
+        return;
+    }
+
+    printf("Result :\n");
+    for (int i = 0; i < (sat->size * sat->size) ; i++) {
+        int v = sat->result[i] - 1;
+        printf(" %d ", sat->result[i]);
+    }
+    printf("\n");
+}
+
+void display_solution(sat sat)
+{
+    if (sat->result == 0) {
+        printf("Not computed yet.\n");
+        return;
+    }
+    if (sat->s == -1) {
+        printf("UNSATISFIABLE\n");
+        return;
+    }
+
+    printf("Solution: \n");
+    for (int i = 0; i < sat->size; i++) {
+        for (int j = 0; j < sat->size; j++) {
+            printf("%c ", sat->solution[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void run_glucose(const char* glucose, const char* input, const char* out) {
+
+    char command[1024];
+
+    snprintf(command, sizeof(command),
+        "%s %s/problem.cnf > %s/satisfaisable.txt %s/result.txt",
+        glucose, input, out, out);
+
+    system(command);
+    // system("wsl /home/maxence/sat/glucose/simp/glucose ../input/problem.cnf > ../out/satisfaisable.txt ../out/result.txt");
+}
+
+void insert_letter(sat sat, int ligne, int collum, char letter) {
+
+    sat->solution[ligne][collum] = letter;
+}
+
+void read_result_build_solution(sat sat, char* out_dir) {
+
+    char file_path[512];
+
+    snprintf(file_path, sizeof(file_path), "%s/result.txt", out_dir);
+
+    FILE* f = fopen(file_path, "r");
+
+    if (f == NULL) {
+        printf("Erreur fichier result not found\n");
+        return;
+    }
+
+    sat->result = calloc(sat->size * sat->size, sizeof(int));
+    if (sat->result == NULL) {
+        printf("Erreur calloc\n");
+        return;
+    }
+
+    int n;
+    int taille = 0;
+    while (fscanf(f, "%d", &n) == 1) {
+        if (n > 0) {
+            sat->result[taille] = n;
+            taille++;
+        }
+    }
+
+    fclose(f);
+
+    for (int i = 0; i < taille; i++) {
+        int v = sat->result[i] - 1;
+
+        int lettre = v % 3;
+        int cellule = v / 3;
+        int ligne = cellule / 3;
+        int colonne = cellule % 3;
+
+        insert_letter(sat, ligne, colonne, 'A' + lettre);
+    }
+}

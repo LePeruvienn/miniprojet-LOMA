@@ -10,6 +10,26 @@ struct puzzle
 	char** grille;
 };
 
+int get_size(const struct puzzle* p)
+{
+	return p->size;
+}
+
+char* get_bord(puzzle p, enum edge e)
+{
+	return p->bords[e];
+}
+
+char** get_grille(puzzle p)
+{
+	return p->grille;
+}
+
+char get_cell(puzzle p, int row, int col)
+{
+	return p->grille[row][col];
+}
+
 puzzle create_puzzle(int size)
 {
 	puzzle p = malloc(sizeof(struct puzzle));
@@ -166,11 +186,6 @@ void load_grid_from_file(puzzle p, FILE* f)
 	}
 }
 
-void insert_letter(puzzle p, int ligne, int collum, char letter) {
-
-	p->grille[ligne][collum] = letter;
-}
-
 void init_file(FILE* f, int ligne_to_skip)
 {
 	char tmp[256];
@@ -207,17 +222,6 @@ void display_bords(puzzle p)
 	for (int i = 0; i < p->size; i++)
 		printf("%c ", p->bords[BOTTOM][i]);
 	printf("/\n");
-}
-
-void display_grid(puzzle p)
-{
-	printf("GRID: \n");
-	for (int i = 0; i < p->size; i++) {
-		for (int j = 0; j < p->size; j++) {
-			printf("%c ", p->grille[i][j]);
-		}
-		printf("\n");
-	}
 }
 
 puzzle load_puzzle(const char* filepath)
