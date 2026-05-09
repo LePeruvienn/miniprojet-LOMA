@@ -5,8 +5,8 @@
 
 struct sat
 {
-    int s; // -1 not sat / 0 not computed / 1 
-    int size; // -1 not sat / 0 not computed / 1 sat
+    int s; // -1 not sat / 0 not computed / 1 sat
+    int size;
     int* result; // the result.txt file 
     char** solution; // the solution
 };
