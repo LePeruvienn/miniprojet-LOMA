@@ -12,7 +12,7 @@ typedef enum
 
 } edge;
 
-puzzle create_puzzle(int size);
+puzzle create_puzzle(unsigned int size, unsigned int nb_letters);
 void free_puzzle(puzzle p);
 
 //letter get_constraint(edge e, unsigned int i);

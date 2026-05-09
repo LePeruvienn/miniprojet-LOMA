@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 #include "puzzle.h"
+#include "logger.h"
 
 struct puzzle
 {
-	int size;
+	unsigned int size;
+	unsigned int nb_letter;
 	char* bords[4];// TOP, BOTTOM, RIGHT, LEFT using emun "edge"
 	char** grille;
 };
@@ -30,12 +32,13 @@ char get_cell(puzzle p, int row, int col)
 	return p->grille[row][col];
 }
 
-puzzle create_puzzle(int size)
+puzzle create_puzzle(unsigned int size, unsigned nb_letter)
 {
 	puzzle p = malloc(sizeof(struct puzzle));
 	if (!p) return NULL;
 
 	p->size = size;
+	p->nb_letter = nb_letter;
 
 	p->bords[TOP] = malloc(size * sizeof(char));
 	p->bords[BOTTOM] = malloc(size * sizeof(char));
@@ -231,9 +234,22 @@ puzzle load_puzzle(const char* filepath)
 	}
 
 	int size;
-	(void)sscanf(line, "%d", &size); // (void) enleve le warning 
+	int nb_letter;
+	(void) sscanf(line, "%d %d", &size, &nb_letter); // (void) enleve le warning 
 
-	puzzle p = create_puzzle(size);
+	if (nb_letter <= 0 || size <= 0)
+	{
+		LOG_ERROR("Failed to read puzzle size and number of letter");
+		return NULL;
+	}
+
+	if (nb_letter > size)
+	{
+		LOG_ERROR("The amout of letter of the puzzle cannot be more than the size of the puzzle");
+		return NULL;
+	}
+
+	puzzle p = create_puzzle(size, nb_letter);
 
 	load_top_from_file(p, f);
 	load_left_from_file(p, f);
@@ -249,6 +265,7 @@ puzzle load_puzzle(const char* filepath)
 void print_puzzle(puzzle p)
 {
 	printf("Puzzle size = %d\n", p->size);
+	printf("Puzzle nb letters = %d\n", p->nb_letter);
 
 	char* top = p->bords[TOP];
 	char* bot = p->bords[BOTTOM];

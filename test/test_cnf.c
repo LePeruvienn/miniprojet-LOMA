@@ -28,15 +28,37 @@ int main(int argc, char** argv)
 	// print_dimacs(s);
 	write_dimacs(s, dimacs_path);
 
-	sat sat = create_sat(puzzle_size);
+	sat sat1 = create_sat(puzzle_size);
 
 	run_glucose("glucose", "input", "out");
 
-	read_result_build_solution(sat, "out");
-	display_result(sat);
-	display_solution(sat);
+	read_result_build_solution(sat1, "out");
 
-	free_sat(sat);
+	display_result(sat1);
+	display_solution(sat1);
+
+	// ------- SECOND RESULT ----------
+
+	var* result = get_result(sat1);
+
+	deny_solution(s, result, puzzle_size * puzzle_size);
+	write_dimacs(s, dimacs_path);
+
+	sat sat2 = create_sat(puzzle_size);
+
+	run_glucose("glucose", "input", "out");
+
+	read_result_build_solution(sat2, "out");
+
+	display_result(sat2);
+	display_solution(sat2);
+
+	// FREE PROGRAM
+
+	// free_sat(sat1);
+	// free_sat(sat2);
+	// free_cnf(...);
+	free_puzzle(p);
 
 	return 0;
 }

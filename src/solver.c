@@ -153,6 +153,20 @@ void make_cnf(solver s)
 	free(lits_case_tmp);
 }
 
+void deny_solution(solver s, var* solution, unsigned int size)
+{
+	cnf c = s->c;
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		var v = solution[i];
+		lit l = - (lit) v;
+
+		add_lit(c, l);
+	}
+	end_clause(c);
+}
+
 void write_dimacs(solver s, char* outpath)
 {
 	FILE* f = fopen(outpath, "w");

@@ -5,6 +5,7 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
+#include "cnf.h"
 #include "puzzle.h"
 
 typedef struct solver* solver;
@@ -17,5 +18,6 @@ void make_cnf(solver s);
 void write_dimacs(solver s, char* outpath);
 void print_dimacs(solver s);
 
+void deny_solution(solver s, var* solution, unsigned int size);
 
 #endif // SOLVER_H

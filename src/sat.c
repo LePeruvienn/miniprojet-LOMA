@@ -8,7 +8,7 @@ struct sat
 {
     int s; // -1 not sat / 0 not computed / 1 sat
     int size;
-    int* result; // the result.txt file 
+    var* result; // the result.txt file 
     letter** solution; // the solution
 };
 
@@ -58,7 +58,7 @@ int get_status(sat sat)
     return sat->s;
 }
 
-int* get_result(sat sat)
+var* get_result(sat sat)
 {
     return sat->result;
 }
@@ -73,7 +73,7 @@ void set_status(sat sat, int s)
     sat->s = s;
 }
 
-void set_result(sat sat, int* result)
+void set_result(sat sat, var* result)
 {
     sat->result = result;
 }
