@@ -1,7 +1,7 @@
 #include "solver.h"
 #include "sat.h"
 
-char* puzzle_path = "input/puzzle3.data";
+char* puzzle_path = "input/puzzle1.data";
 char* dimacs_path = "input/problem.cnf";
 
 int main(int argc, char** argv)
@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 
 	sat sat1 = create_sat(puzzle_size);
 
-	run_glucose("glucose", "input", "out");
+	// run_glucose("glucose", "input", "out");
 
 	read_result_build_solution(sat1, "out");
 
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
 	sat sat2 = create_sat(puzzle_size);
 
-	run_glucose("glucose", "input", "out");
+	// run_glucose("glucose", "input", "out");
 
 	read_result_build_solution(sat2, "out");
 

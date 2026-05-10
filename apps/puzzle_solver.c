@@ -1,41 +1,48 @@
+#include "interface.h"
+#include "puzzle.h"
 #include "solver.h"
 #include "sat.h"
 
-char* puzzle_path = "input/puzzle3.data";
-char* dimacs_path = "input/problem.cnf";
+#include <stdio.h>
 
 int main(int argc, char** argv)
 {
-	if (argc == 2)
-	{
-		puzzle_path = argv[1];
-	}
+	config conf = get_config(argc, argv);
 
-	puzzle p = load_puzzle(puzzle_path);
+	print_config(conf);
+
+	puzzle p = load_puzzle(conf.puzzle_path);
 
 	if (p == NULL)
 	{
+		perror("Failed to load puzzle");
 		return 1;
 	}
 
-	print_puzzle(p);
-	
-	int puzzle_size = get_size(p);
-
 	solver s = create_solver(p);
+	
+	if (s == NULL)
+	{
+		perror("Failed to create solver");
+		return 1;
+	}
 
 	make_cnf(s);
-	write_dimacs(s, dimacs_path);
+	write_dimacs(s, conf.dimacs_path);
 
-	sat sat = create_sat(puzzle_size);
+	// Creating SAT solver
+	sat _sat = create_sat(conf.dimacs_path,
+	                      conf.sat_path,
+	                      conf.result_path,
+	                      get_size(p));
 
-	run_glucose("glucose", "input", "out");
+	run_glucose(_sat, conf.glucose_exe);
+	read_result_build_solution(_sat);
 
-	read_result_build_solution(sat, "out");
-	display_result(sat);
-	display_solution(sat);
+	display_solution(_sat);
 
-	free_sat(sat);
+	free_solver(s);
+	free_sat(_sat);
 
 	return 0;
 }

@@ -35,7 +35,7 @@ solver create_solver_for(char* path)
 
 	if (p == NULL)
 	{
-		LOG_ERROR("Failed to load puzzle");
+		LOG_ERROR("Solver failed to load puzzle.");
 		return NULL;
 	}
 
@@ -43,6 +43,14 @@ solver create_solver_for(char* path)
 
 	return s;
 }
+
+void free_solver(solver s)
+{
+	free_cnf(s->c);
+	free_puzzle(s->p);
+	free(s);
+}
+
 
 void make_cnf(solver s)
 {

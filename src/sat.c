@@ -6,127 +6,142 @@
 
 struct sat
 {
-    int s; // -1 not sat / 0 not computed / 1 sat
+    int status; // 20 not sat / 0 not computed / 10 sat
     int size;
+
+    char* dimacs_path;
+    char* sat_path;
+    char* result_path;
+
     var* result; // the result.txt file 
     letter** solution; // the solution
 };
 
-sat create_sat(int size)
+sat create_sat(char* dimacs_path, char* sat_path, char* result_path, int puzzle_size)
 {
-    sat sat = malloc(sizeof(struct sat));
+    sat s = malloc(sizeof(struct sat));
 
-    if (sat == NULL) {
+    if (s == NULL) {
         return NULL;
     }
 
-    sat->s = 0;
-    sat->size = size; 
-    sat->result = NULL;
+    s->status = 0;
+    s->size = puzzle_size; 
+    s->dimacs_path = dimacs_path;
+    s->sat_path = sat_path;
+    s->result_path = result_path;
 
-    sat->solution = malloc(size * sizeof(char*));
+    s->result = NULL;
 
-    if (sat->solution == NULL) {
-        free(sat);
+    s->solution = malloc(puzzle_size * sizeof(char*));
+
+    if (s->solution == NULL) {
+        free(s);
         return NULL;
     }
 
-    for (int i = 0; i < size; i++) {
-        sat->solution[i] = malloc(size * sizeof(char));
+    for (int i = 0; i < puzzle_size; i++) {
+        s->solution[i] = malloc(puzzle_size * sizeof(char));
     }
 
-    return sat;
+    return s;
 }
 
-void free_sat(sat sat)
+void free_sat(sat s)
 {
-    for (int i = 0; i < sat->size; i++) {
-        free(sat->solution[i]);
+    for (int i = 0; i < s->size; i++) {
+        free(s->solution[i]);
     }
 
-    free(sat->solution);
+    free(s->solution);
 
-    if (sat->result != NULL) {
-        free(sat->result);
+    if (s->result != NULL) {
+        free(s->result);
     }
 
-    free(sat);
+    free(s);
 }
 
-int get_status(sat sat)
+int get_status(sat s)
 {
-    return sat->s;
+    return s->status;
 }
 
-var* get_result(sat sat)
+var* get_result(sat s)
 {
-    return sat->result;
+    return s->result;
 }
 
-letter** get_solution(sat sat)
+letter** get_solution(sat s)
 {
-    return sat->solution;
+    return s->solution;
 }
 
-void set_status(sat sat, int s)
+void set_status(sat s, int status)
 {
-    sat->s = s;
+    s->status = status;
 }
 
-void set_result(sat sat, var* result)
+void set_result(sat s, var* result)
 {
-    sat->result = result;
+    s->result = result;
 }
 
-void display_result(sat sat)
+void display_result(sat s)
 {
-    if (sat->result == 0) {
+    if (s->status == NOT_COMPUTED) {
         printf("Not computed yet.\n");
         return;
     }
-    if (sat->s == -1) {
-        printf("UNSATISFIABLE\n");
+    if (s->status == NOT_SAT) {
+        printf("UNsISFIABLE\n");
         return;
     }
 
     printf("Result :\n");
-    for (int i = 0; i < (sat->size * sat->size) ; i++) {
-        printf(" %d ", sat->result[i]);
+    for (int i = 0; i < (s->size * s->size) ; i++) {
+        printf(" %d ", s->result[i]);
     }
     printf("\n");
 }
 
-void display_solution(sat sat)
+void display_solution(sat s)
 {
-    if (sat->result == 0) {
+    if (s->status == NOT_COMPUTED) {
         printf("Not computed yet.\n");
         return;
     }
-    if (sat->s == -1) {
+    if (s->status == NOT_SAT) {
         printf("UNSATISFIABLE\n");
         return;
     }
 
     printf("Solution: \n");
-    for (int i = 0; i < sat->size; i++) {
-        for (int j = 0; j < sat->size; j++) {
-            print_letter(sat->solution[j][i]); // Flipped j & i or else the print will be flipped
+    for (int i = 0; i < s->size; i++) {
+        for (int j = 0; j < s->size; j++) {
+            print_letter(s->solution[j][i]); // Flipped j & i or else the print will be flipped
             printf(" ");
         }
         printf("\n");
     }
 }
 
-void run_glucose(const char* glucose, const char* input, const char* out) {
+void run_glucose(sat s, char* glucose_exe) {
 
     char command[1024];
 
     snprintf(command, sizeof(command),
-        "%s %s/problem.cnf > %s/satisfaisable.txt %s/result.txt",
-        glucose, input, out, out);
+        "%s %s > %s %s",
+        glucose_exe, s->dimacs_path, s->sat_path, s->result_path);
 
-    system(command);
     // system("wsl /home/maxence/sat/glucose/simp/glucose ../input/problem.cnf > ../out/satisfaisable.txt ../out/result.txt");
+    int return_code = system(command);
+
+    #ifdef _WIN32
+        s->status = return_code;
+    #else
+        s->status = WEXITSTATUS(return_code);
+    #endif
 }
 
 void insert_letter(sat sat, letter_pos lp) {
@@ -134,21 +149,17 @@ void insert_letter(sat sat, letter_pos lp) {
     sat->solution[lp.x][lp.y] = lp.l;
 }
 
-void read_result_build_solution(sat sat, char* out_dir) {
+void read_result_build_solution(sat s) {
 
-    char file_path[512];
-
-    snprintf(file_path, sizeof(file_path), "%s/result.txt", out_dir);
-
-    FILE* f = fopen(file_path, "r");
+    FILE* f = fopen(s->result_path, "r");
 
     if (f == NULL) {
         printf("Erreur fichier result not found\n");
         return;
     }
 
-    sat->result = calloc(sat->size * sat->size, sizeof(int));
-    if (sat->result == NULL) {
+    s->result = calloc(s->size * s->size, sizeof(int));
+    if (s->result == NULL) {
         printf("Erreur calloc\n");
         return;
     }
@@ -157,7 +168,7 @@ void read_result_build_solution(sat sat, char* out_dir) {
     int taille = 0;
     while (fscanf(f, "%d", &n) == 1) {
         if (n > 0) {
-            sat->result[taille] = n;
+            s->result[taille] = n;
             taille++;
         }
     }
@@ -166,14 +177,14 @@ void read_result_build_solution(sat sat, char* out_dir) {
 
     for (int i = 0; i < taille; i++) {
 
-        lit v = sat->result[i];
+        lit v = s->result[i];
 
         if (v < 0)
         {
             continue;
         }
 
-        letter_pos lp = get_letter_pos_from_var(v, sat->size);
-        insert_letter(sat, lp);
+        letter_pos lp = get_letter_pos_from_var(v, s->size);
+        insert_letter(s, lp);
     }
 }

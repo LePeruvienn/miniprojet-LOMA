@@ -13,6 +13,8 @@ typedef struct solver* solver;
 solver create_solver(puzzle p);
 solver create_solver_for(char* path);
 
+void free_solver(solver s);
+
 void make_cnf(solver s);
 
 void write_dimacs(solver s, char* outpath);
