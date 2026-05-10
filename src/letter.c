@@ -19,7 +19,7 @@ void print_letter(letter l)
 	} 
 	else
 	{
-		printf("EMPTY");
+		printf("_");
 	}
 }
 
@@ -31,6 +31,6 @@ void fprint_letter(FILE* f, letter l)
 	} 
 	else
 	{
-		fprintf(f, "EMPTY");
+		fprintf(f, "_");
 	}
 }

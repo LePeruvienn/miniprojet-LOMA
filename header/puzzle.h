@@ -17,7 +17,8 @@ void free_puzzle(puzzle p);
 
 //letter get_constraint(edge e, unsigned int i);
 //letter get_letter(unsigned int i, unsigned int j);
-int get_size(puzzle p);
+unsigned int get_size(puzzle p);
+unsigned int get_puzzle_nb_letter(puzzle p);
 char* get_bord(puzzle p, edge e);
 char** get_grille(puzzle p);
 char get_cell(puzzle p, int row, int col);

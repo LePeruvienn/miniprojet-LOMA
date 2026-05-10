@@ -12,9 +12,14 @@ struct puzzle
 	char** grille;
 };
 
-int get_size(puzzle p)
+unsigned int get_size(puzzle p)
 {
 	return p->size;
+}
+
+unsigned int get_puzzle_nb_letter(puzzle p)
+{
+	return p->nb_letter;
 }
 
 char* get_bord(puzzle p, edge e)

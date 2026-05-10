@@ -49,9 +49,9 @@ void make_cnf(solver s)
 	puzzle p = s->p;
 	cnf c = s->c;
 
-	int puzzle_size = get_size(p);
+	unsigned int puzzle_size = get_size(p);
 
-	unsigned int letter_amount = puzzle_size; 
+	unsigned int letter_amount = get_puzzle_nb_letter(p);
 
 	// Le nombre de variable propositionnel X_ijl (+1 car on compte aussi les variable pour les positions de EMPTY)
 	unsigned int var_amount = (letter_amount + 1) * puzzle_size * puzzle_size;
@@ -80,20 +80,22 @@ void make_cnf(solver s)
 		}
 	}
 
-	lit* lits_case_tmp = malloc(sizeof(lit) * letter_amount);
+	letter start_letter = (puzzle_size - letter_amount == 0) ? 1 : 0; // 0 == EMPTY
+	unsigned int lits_case_size = letter_amount - start_letter + 1;
+	lit* lits_case_tmp = malloc(sizeof(lit) * lits_case_size);
 
-	// 2. EXACTEMENT 1 SEUL LETTER PAR CASE
+	// 2. EXACTEMENT 1 SEUL LETTER PAR CASE (ou case vide si possible)
 	for (int i = 0; i < puzzle_size; ++i)
 	{
 		for (int j = 0; j < puzzle_size; ++j)
 		{
-			for (letter let = 1; let <= letter_amount; ++let)  // On commence à 1 car 0 == EMPTY on ne veut pas que des cases soit vide!
+			for (letter let = start_letter; let <= letter_amount; ++let)
 			{
 				lit li = get_var_from_letter_pos(let, i, j, puzzle_size);
-				lits_case_tmp[let - 1] = li;
+				lits_case_tmp[let - start_letter] = li;
 			}
 
-			exactlyOne(c, lits_case_tmp, letter_amount);
+			exactlyOne(c, lits_case_tmp, lits_case_size);
 		}
 	}
 
