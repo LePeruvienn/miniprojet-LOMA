@@ -5,31 +5,15 @@
 
 #include <stdio.h>
 
-int main(int argc, char** argv)
-{
-	config conf = get_config(argc, argv);
-
-	print_config(conf);
-
-	puzzle p = load_puzzle(conf.puzzle_path);
-
-	if (p == NULL)
-	{
-		perror("Failed to load puzzle");
-		return 1;
-	}
-
-	solver s = create_solver(p);
+typedef struct {
 	
-	if (s == NULL)
-	{
-		perror("Failed to create solver");
-		return 1;
-	}
+	int status;
+	var* result;
 
-	make_cnf(s);
-	write_dimacs(s, conf.dimacs_path);
+} sat_result ;
 
+sat_result find_solution(config conf, puzzle p)
+{
 	// Creating SAT solver
 	sat _sat = create_sat(conf.dimacs_path,
 	                      conf.sat_path,
@@ -41,8 +25,69 @@ int main(int argc, char** argv)
 
 	display_solution(_sat);
 
-	free_solver(s);
+	sat_result res;
+
+	res.status = get_status(_sat);
+	res.result = get_result(_sat);
+
 	free_sat(_sat);
+
+	return res;
+}
+
+int main(int argc, char** argv)
+{
+	config conf = get_config(argc, argv);
+
+	if (conf.print_config)
+	{
+		print_config(conf);
+	}
+
+	puzzle p = load_puzzle(conf.puzzle_path);
+
+	if (p == NULL)
+	{
+		perror("Failed to load puzzle");
+		return 1;
+	}
+
+	if (conf.print_input)
+	{
+		print_puzzle(p);
+	}
+
+	solver s = create_solver(p);
+	
+	if (s == NULL)
+	{
+		perror("Failed to create solver");
+		return 2;
+	}
+
+	make_cnf(s);
+	write_dimacs(s, conf.dimacs_path);
+
+	// Try to find a solution
+	sat_result res = find_solution(conf, p);
+
+	if (res.status != SAT)
+	{
+		return 3;
+	}
+
+	printf("Trying to find second solution ...\n");
+
+	deny_solution(s, res.result, get_size(p));
+
+	sat_result res2 = find_solution(conf, p);
+
+	if (res2.status == SAT)
+	{
+		printf("2 solution found !\n");
+	}
+
+	free_solver(s);
 
 	return 0;
 }

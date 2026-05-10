@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 void check_arguments(int argc, char** argv)
 {
@@ -39,6 +40,21 @@ config get_config(int argc, char** argv)
 	conf.dimacs_path  = (argc == 3) ? argv[2] : DEFAULT_DIMACS_PATH;
 	conf.sat_path = (argc == 4) ? argv[3] : DEFAULT_SAT_PATH;
 	conf.result_path  = (argc == 5) ? argv[4] : DEFAULT_RESULT_PATH;
+
+	conf.print_config = false;
+	conf.print_input = false;
+
+	for (unsigned int i = 1; i < argc; ++i)
+	{
+		if (strcmp(argv[i], OPT_PRINT_CONFIG) == 0)
+		{
+			conf.print_config = true;
+		}
+		if (strcmp(argv[i], OPT_PRINT_INPUT) == 0)
+		{
+			conf.print_input = true;
+		}
+	}
 
 	return conf;
 }

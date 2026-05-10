@@ -23,9 +23,9 @@ c nb learnts size 2     : 0
 c nb learnts size 1     : 0
 c conflicts             : 0              (0 /sec)
 c decisions             : 0              (-nan % random) (0 /sec)
-c propagations          : 49             (37348 /sec)
+c propagations          : 49             (16295 /sec)
 c nb reduced Clauses    : 0
 c LCM                   : 0 / 0 
-c CPU time              : 0.001312 s
+c CPU time              : 0.003007 s
 
 s UNSATISFIABLE
