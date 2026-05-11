@@ -29,19 +29,19 @@ c |                                                                             
 c |          RESTARTS           |          ORIGINAL         |              LEARNT              | Progress |
 c |       NB   Blocked  Avg Cfc |    Vars  Clauses Literals |   Red   Learnts    LBD2  Removed |          |
 c =========================================================================================================
-c last restart ## conflicts  :  1 5 
+c last restart ## conflicts  :  0 0 
 c =========================================================================================================
-c restarts              : 1 (1 conflicts in avg)
+c restarts              : 1 (0 conflicts in avg)
 c blocked restarts      : 0 (multiple: 0) 
 c last block at restart : 0
 c nb ReduceDB           : 0
 c nb removed Clauses    : 0
-c average learnt size   : 2
-c nb learnts DL2        : 1
-c nb learnts size 2     : 1
+c average learnt size   : 0
+c nb learnts DL2        : 0
+c nb learnts size 2     : 0
 c nb learnts size 1     : 0
-c conflicts             : 1              (inf /sec)
-c decisions             : 8              (0.00 % random) (inf /sec)
+c conflicts             : 0              (-nan /sec)
+c decisions             : 1              (0.00 % random) (inf /sec)
 c propagations          : 216            (inf /sec)
 c nb reduced Clauses    : 0
 c LCM                   : 0 / 0 

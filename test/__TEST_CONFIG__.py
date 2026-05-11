@@ -4,6 +4,9 @@ import os
 
 BINARY_NAME = "puzzle_solver"
 
+if sys.platform == "win32" or os.name == "nt":
+    BINARY_NAME += ".exe"
+
 #################### INIT ####################
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
