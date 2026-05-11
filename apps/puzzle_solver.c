@@ -23,12 +23,17 @@ sat_result find_solution(config conf, puzzle p)
 	run_glucose(_sat, conf.glucose_exe);
 	read_result_build_solution(_sat);
 
-	display_solution(_sat);
-
 	sat_result res;
 
 	res.status = get_status(_sat);
 	res.result = get_result(_sat);
+
+	if (res.status == SAT)
+	{
+		printf("SAT !\n");
+	}
+
+	display_solution(_sat);
 
 	free_sat(_sat);
 
@@ -49,12 +54,14 @@ int main(int argc, char** argv)
 	if (p == NULL)
 	{
 		perror("Failed to load puzzle");
-		return 1;
+		return 10;
 	}
 
 	if (conf.print_input)
 	{
+		printf("\n -------- Input -------- \n\n");
 		print_puzzle(p);
+		printf("\n ----------------------- \n");
 	}
 
 	solver s = create_solver(p);
@@ -62,21 +69,24 @@ int main(int argc, char** argv)
 	if (s == NULL)
 	{
 		perror("Failed to create solver");
-		return 2;
+		return 11;
 	}
 
 	make_cnf(s);
 	write_dimacs(s, conf.dimacs_path);
+
+	printf("\n>>> Finding puzzle solution ...\n\n");
 
 	// Try to find a solution
 	sat_result res = find_solution(conf, p);
 
 	if (res.status != SAT)
 	{
-		return 3;
+		printf("\nResults: No solution found :(\n");
+		return 12;
 	}
 
-	printf("Trying to find second solution ...\n");
+	printf("\n>>> Trying to find second solution ...\n\n");
 
 	deny_solution(s, res.result, get_size(p));
 
@@ -84,7 +94,11 @@ int main(int argc, char** argv)
 
 	if (res2.status == SAT)
 	{
-		printf("2 solution found !\n");
+		printf("\nResults: 2 solutions found :D\n");
+	}
+	else
+	{
+		printf("\nResults: 1 solution found !\n");
 	}
 
 	free_solver(s);

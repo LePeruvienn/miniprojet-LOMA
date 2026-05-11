@@ -9,8 +9,11 @@ void check_arguments(int argc, char** argv)
 	if (argc < 2)
 	{
 		printf("ERROR: You must provide at least 1 argument.\n");
-		printf("usage: [puzzle.data] | optional, outputed files path: (puzzle.dimacs) (sat.txt) (result.txt)\n");
-		printf("- By default all the output files are in the \"%s\" dir (the folder must exist).\n", TMP_DIR);
+		printf("usage: [-options] [puzzle.data] | optional, outputed files path: (puzzle.dimacs) (sat.txt) (result.txt)\n");
+		printf("\n- By default all the output files are in the \"%s\" dir (the folder must exist).\n", TMP_DIR);
+		printf("\n- All the options must place at the begin of the command :\n");
+		printf("  [ -pc ] : prints configuration\n");
+		printf("  [ -pi ] : prints input\n");
 	
 		char* glucose_exe = getenv(ENV_GLUCOSE_EXE);
 
@@ -29,32 +32,54 @@ void check_arguments(int argc, char** argv)
 
 config get_config(int argc, char** argv)
 {
-	check_arguments(argc, argv);
-
 	config conf;
 
 	char* glucose_exe = getenv(ENV_GLUCOSE_EXE);
-	
-	conf.glucose_exe = (glucose_exe == NULL) ? DEFAULT_GLUCOSE_EXE : glucose_exe;
-	conf.puzzle_path  = argv[1];
-	conf.dimacs_path  = (argc == 3) ? argv[2] : DEFAULT_DIMACS_PATH;
-	conf.sat_path = (argc == 4) ? argv[3] : DEFAULT_SAT_PATH;
-	conf.result_path  = (argc == 5) ? argv[4] : DEFAULT_RESULT_PATH;
 
+	// Set options false by default
 	conf.print_config = false;
 	conf.print_input = false;
 
+	unsigned int start_index = 0;
+
+	// Getting options
 	for (unsigned int i = 1; i < argc; ++i)
 	{
-		if (strcmp(argv[i], OPT_PRINT_CONFIG) == 0)
+		char* opt = argv[i];
+
+		if (strcmp(opt, OPT_PRINT_CONFIG) == 0)
 		{
 			conf.print_config = true;
+			++start_index;
 		}
-		if (strcmp(argv[i], OPT_PRINT_INPUT) == 0)
+		else if (strcmp(opt, OPT_PRINT_INPUT) == 0)
 		{
 			conf.print_input = true;
+			++start_index;
+		}
+		else if (opt[0] == '-')
+		{
+			fprintf(stderr, "Error: invalid option \'%s\'\n.", opt);
+			exit(2);
 		}
 	}
+
+	int argc_no_opt = argc - start_index;
+
+	check_arguments(argc_no_opt, argv);
+
+	unsigned int puzzle_path_index = 1;
+	unsigned int dimacs_path_index = 2;
+	unsigned int sat_path_index    = 3;
+	unsigned int result_path_index = 4;
+	
+	conf.glucose_exe  = (glucose_exe == NULL) ? DEFAULT_GLUCOSE_EXE : glucose_exe;
+
+	conf.puzzle_path  = argv[puzzle_path_index + start_index];
+	
+	conf.dimacs_path  = (argc_no_opt >= dimacs_path_index + 1) ? argv[dimacs_path_index + start_index] : DEFAULT_DIMACS_PATH;
+	conf.sat_path     = (argc_no_opt >= sat_path_index    + 1) ? argv[sat_path_index    + start_index] : DEFAULT_SAT_PATH;
+	conf.result_path  = (argc_no_opt >= result_path_index + 1) ? argv[result_path_index + start_index] : DEFAULT_RESULT_PATH;
 
 	return conf;
 }
