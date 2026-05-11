@@ -4,29 +4,33 @@
 #include <stdio.h>
 #include <string.h>
 
+void print_help()
+{
+	printf("usage: [-options] [puzzle.data] | optional, outputed files path: (puzzle.dimacs) (sat.txt) (result.txt)\n");
+	printf("\n- By default all the output files are in the \"%s\" dir (the folder must exist).\n", OUT_DIR);
+	printf("\n- All the options must place at the begin of the command :\n");
+	printf("  [ -pc ] : prints configuration\n");
+	printf("  [ -pi ] : prints input\n");
+
+	char* glucose_exe = getenv(ENV_GLUCOSE_EXE);
+
+	if (glucose_exe == NULL)
+	{
+		printf("\nglucose executable not set ! You cant set is with the \"%s\" environment variable.\n", ENV_GLUCOSE_EXE);
+		printf("- You can use `export %s=...` on linux or `set %s ...` on windows.\n", ENV_GLUCOSE_EXE, ENV_GLUCOSE_EXE);
+	}
+
+	printf("\nCurrent glucose executable is : \"%s\"\n",
+		(glucose_exe == NULL) ? DEFAULT_GLUCOSE_EXE : glucose_exe);
+}
+
 void check_arguments(int argc, char** argv)
 {
 	if (argc < 2)
 	{
-		printf("ERROR: You must provide at least 1 argument.\n");
-		printf("usage: [-options] [puzzle.data] | optional, outputed files path: (puzzle.dimacs) (sat.txt) (result.txt)\n");
-		printf("\n- By default all the output files are in the \"%s\" dir (the folder must exist).\n", TMP_DIR);
-		printf("\n- All the options must place at the begin of the command :\n");
-		printf("  [ -pc ] : prints configuration\n");
-		printf("  [ -pi ] : prints input\n");
-	
-		char* glucose_exe = getenv(ENV_GLUCOSE_EXE);
-
-		if (glucose_exe == NULL)
-		{
-			printf("\nglucose executable not set ! You cant set is with the \"%s\" environment variable.\n", ENV_GLUCOSE_EXE);
-			printf("- You can use `export %s=...` on linux or `set %s ...` on windows.\n", ENV_GLUCOSE_EXE, ENV_GLUCOSE_EXE);
-		}
-
-		printf("\nCurrent glucose executable is : \"%s\"\n",
-			(glucose_exe == NULL) ? DEFAULT_GLUCOSE_EXE : glucose_exe);
-
-		exit(1);
+		fprintf(stderr, "ERROR: You must provide at least 1 argument.\n");
+		print_help();
+		exit(22);
 	}
 }
 
@@ -57,10 +61,15 @@ config get_config(int argc, char** argv)
 			conf.print_input = true;
 			++start_index;
 		}
+		else if (strcmp(opt, OPT_PRINT_HELP) == 0)
+		{
+			print_help();
+			exit(20);
+		}
 		else if (opt[0] == '-')
 		{
 			fprintf(stderr, "Error: invalid option \'%s\'\n.", opt);
-			exit(2);
+			exit(21);
 		}
 	}
 

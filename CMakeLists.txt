@@ -22,12 +22,13 @@ file(GLOB APPS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/apps/*.c")
 # On créer notre librairie de solveur de puzzle
 add_library(puzzle_solver_lib STATIC ${SOURCES})
 
+# MOVED TO PYTHON TESTING !!
 # On créer tout les executable de tout nos tests
-foreach(TEST_FILE ${TESTS})
-	get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
-	add_executable(${TEST_NAME}.tst ${TEST_FILE})
-	target_link_libraries(${TEST_NAME}.tst puzzle_solver_lib)
-endforeach()
+# foreach(TEST_FILE ${TESTS})
+	# get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
+	# add_executable(${TEST_NAME}.tst ${TEST_FILE})
+	# target_link_libraries(${TEST_NAME}.tst puzzle_solver_lib)
+# endforeach()
 
 # On créer tout les executable de toutes nos applications
 foreach(APP_FILE ${APPS})

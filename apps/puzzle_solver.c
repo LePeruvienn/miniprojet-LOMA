@@ -12,6 +12,8 @@ typedef struct {
 
 } sat_result ;
 
+unsigned int nb_solution_found = 0;
+
 sat_result find_solution(config conf, puzzle p)
 {
 	// Creating SAT solver
@@ -83,8 +85,10 @@ int main(int argc, char** argv)
 	if (res.status != SAT)
 	{
 		printf("\nResults: No solution found :(\n");
-		return 12;
+		return nb_solution_found;
 	}
+
+	++nb_solution_found;
 
 	printf("\n>>> Trying to find second solution ...\n\n");
 
@@ -95,6 +99,7 @@ int main(int argc, char** argv)
 	if (res2.status == SAT)
 	{
 		printf("\nResults: 2 solutions found :D\n");
+		++nb_solution_found;
 	}
 	else
 	{
@@ -103,5 +108,5 @@ int main(int argc, char** argv)
 
 	free_solver(s);
 
-	return 0;
+	return nb_solution_found;
 }

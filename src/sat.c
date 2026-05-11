@@ -1,5 +1,7 @@
 #include "sat.h"
 #include "letter_pos.h"
+#include "logger.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +35,7 @@ sat create_sat(char* dimacs_path, char* sat_path, char* result_path, int puzzle_
 
     s->result = NULL;
 
-    s->solution = malloc(puzzle_size * sizeof(char*));
+    s->solution = malloc(puzzle_size * sizeof(letter*));
 
     if (s->solution == NULL) {
         free(s);
@@ -41,7 +43,7 @@ sat create_sat(char* dimacs_path, char* sat_path, char* result_path, int puzzle_
     }
 
     for (int i = 0; i < puzzle_size; i++) {
-        s->solution[i] = malloc(puzzle_size * sizeof(char));
+        s->solution[i] = malloc(puzzle_size * sizeof(letter));
     }
 
     return s;
@@ -49,6 +51,12 @@ sat create_sat(char* dimacs_path, char* sat_path, char* result_path, int puzzle_
 
 void free_sat(sat s)
 {
+    if (s == NULL)
+    {
+        LOG_ERROR("Tried to free a NULL ptr.");
+        return;
+    }
+    
     for (int i = 0; i < s->size; i++) {
         free(s->solution[i]);
     }
@@ -158,7 +166,7 @@ void read_result_build_solution(sat s) {
         return;
     }
 
-    s->result = calloc(s->size * s->size, sizeof(int));
+    s->result = calloc(s->size * s->size, sizeof(var));
     if (s->result == NULL) {
         printf("Erreur calloc\n");
         return;
