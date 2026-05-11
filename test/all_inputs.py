@@ -7,7 +7,8 @@ from __TEST_CONFIG__ import INPUT_DIR
 from __TEST_CONFIG__ import PROGRAM
 
 TEST_NAME = "Solve all puzzles"
-__INIT_TEST__(TEST_NAME)
+TEST_DESC = f"Essaye de trouver une solution pour tout les puzzles se trouvant dans le dossier {INPUT_DIR}."
+__INIT_TEST__(TEST_NAME, TEST_DESC)
 
 ################################################
 

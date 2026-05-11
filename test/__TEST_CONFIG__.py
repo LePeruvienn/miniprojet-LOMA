@@ -9,15 +9,17 @@ BINARY_NAME = "puzzle_solver"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 INPUT_DIR  = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "input"))
 BIN_DIR    = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "bin"))
+OUT_DIR    = os.path.abspath(os.path.join(SCRIPT_DIR, "..", "out"))
 
 PROGRAM = os.path.join(BIN_DIR, BINARY_NAME)
 
 if not os.path.isfile(PROGRAM):
-    print("Couldnt found program binary : " + PROGRAM)
+    print("ERROR: Could not find program binary : " + PROGRAM)
     print("- Try compiling first.")
     exit(1)
 
-def __INIT_TEST__(name):
-    print("Running test : \"" + name + "\"")
+def __INIT_TEST__(name, desc):
+    print("Test Name\t : " + name)
+    print("Description\t : "  + desc)
     print()
 
