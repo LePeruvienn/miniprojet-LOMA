@@ -1,41 +1,28 @@
 import os
 import subprocess
 
-################# CONSTANTS #################
+import __TEST_CONFIG__ 
+from __TEST_CONFIG__ import __INIT_TEST__
+from __TEST_CONFIG__ import INPUT_DIR
+from __TEST_CONFIG__ import PROGRAM
 
 TEST_NAME = "Solve all puzzles"
-BINARY_NAME = "puzzle_solver"
+__INIT_TEST__(TEST_NAME)
 
-#################### INIT ####################
-
-script_dir = os.path.dirname(os.path.abspath(__file__))
-input_dir  = os.path.abspath(os.path.join(script_dir, "..", "input"))
-bin_dir    = os.path.abspath(os.path.join(script_dir, "..", "bin"))
-
-program = os.path.join(bin_dir, BINARY_NAME)
-
-if not os.path.isfile(program):
-	print("Couldnt found program binary : " + program)
-	print("- Try compiling first.")
-	exit(1)
-
-print("Running test : \"" + TEST_NAME + "\"")
-print()
-
-#################### TEST ####################
+################################################
 
 puzzle_amount   = 0
 fail_amount     = 0
 solution_amount = 0
 
-puzzle_files = sorted(os.listdir(input_dir))
+puzzle_files = sorted(os.listdir(INPUT_DIR))
 
 for file_name in puzzle_files:
 
-	puzzle_path = os.path.join(input_dir, file_name)
+	puzzle_path = os.path.join(INPUT_DIR, file_name)
 
 	r = subprocess.run(
-		[program, puzzle_path],
+		[PROGRAM, puzzle_path],
 		stdout=subprocess.DEVNULL,
 		stderr=subprocess.DEVNULL
 	)
