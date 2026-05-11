@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct sat
 {
@@ -77,7 +78,33 @@ int get_status(sat s)
 
 var* get_result(sat s)
 {
+    if (s == NULL || s->result == NULL)
+    {
+        LOG_ERROR("Sat or result is NULL !");
+        return NULL;
+    }
+
     return s->result;
+}
+
+var* get_result_copy(sat s)
+{
+    if (s == NULL || s->result == NULL)
+    {
+        LOG_ERROR("Sat or result is NULL !");
+        return NULL;
+    }
+
+    unsigned int buf_size = sizeof(var) * (s->size * s->size);
+
+    var* copy = malloc(buf_size);
+
+    if (copy != NULL)
+    {
+        memcpy(copy, s->result, buf_size);
+    }
+
+    return copy;
 }
 
 letter** get_solution(sat s)

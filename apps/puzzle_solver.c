@@ -4,6 +4,7 @@
 #include "sat.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
 	
@@ -28,7 +29,7 @@ sat_result find_solution(config conf, puzzle p)
 	sat_result res;
 
 	res.status = get_status(_sat);
-	res.result = get_result(_sat);
+	res.result = get_result_copy(_sat);
 
 	if (res.status == SAT)
 	{
@@ -93,6 +94,7 @@ int main(int argc, char** argv)
 	printf("\n>>> Trying to find second solution ...\n\n");
 
 	deny_solution(s, res.result, get_size(p));
+	write_dimacs(s, conf.dimacs_path);
 
 	sat_result res2 = find_solution(conf, p);
 
@@ -107,6 +109,8 @@ int main(int argc, char** argv)
 	}
 
 	free_solver(s);
+	free(res.result);
+	free(res2.result);
 
 	return nb_solution_found;
 }

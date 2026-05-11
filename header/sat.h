@@ -16,6 +16,7 @@ void free_sat(sat s);
 int get_status(sat s);
 void set_status(sat s, int status);
 var* get_result(sat s);
+var* get_result_copy(sat s);
 void set_result(sat s, var* result);
 letter** get_solution(sat s);
 void display_solution(sat s);

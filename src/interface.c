@@ -17,7 +17,9 @@ void print_help()
 	if (glucose_exe == NULL)
 	{
 		printf("\nglucose executable not set ! You cant set is with the \"%s\" environment variable.\n", ENV_GLUCOSE_EXE);
-		printf("- You can use `export %s=...` on linux or `set %s ...` on windows.\n", ENV_GLUCOSE_EXE, ENV_GLUCOSE_EXE);
+		printf("- You can use `export %s=...` on Linux,          \n", ENV_GLUCOSE_EXE);
+		printf("- Or `set %s ...` with Windows cmd,              \n", ENV_GLUCOSE_EXE);
+		printf("- Or `$env:%s=\" ... \"` with Windows Powershell.\n", ENV_GLUCOSE_EXE);
 	}
 
 	printf("\nCurrent glucose executable is : \"%s\"\n",
