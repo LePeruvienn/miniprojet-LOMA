@@ -37,61 +37,59 @@ cmake -B build
 cmake --build build
 ```
 
-La compilation peut être aussi faite à l'aide du wrapper `MakeFile` 
+La compilation peut être aussi faite à l'aide du wrapper `MakeFile` qui éxécute les commande de `CMake` à votre place.
 
-## 📄 Format de Fichier (.abc)
+```bash
+make # Compile le tout
+make clean # Efface les fichiers de compilations
+```
 
-Nous avons conçu un format spécifique pour définir les instances du puzzle. Les fichiers doivent suivre cette structure :
+La compilation peut être aussi faite via l'IDE Visual Studio.
 
-```text
-6 4          # Taille de la grille (n) | Nombre de lettres
-C . . F D A  # Indices Bord Haut (. pour aucun)
-B . A . . C  # Indices Bord Bas
-. E . . . .  # Indices Bord Gauche
-. . . B . .  # Indices Bord Droite
-# Grille initiale (. pour vide, lettre pour case fixée)
-. . . . . .
-. F . . . .
-. . . . A .
-. . B . . .
-. . . . . .
-. . . . . .
+
+## 📄 Format de Fichier
+
+Nous avons conçu un format spécifique pour définir les puzzle :
 
 ```
+# Puzzle
+5 4
+ A C     D
+ . . . . .D
+B. . . . .
+ . . . . .B
+ . . . . .C
+ . . . . .
+   D C
+```
+
+- Première ligne : un `#` suivie d'un titre
+- Deuxième ligne : nombre qui est la taille du puzzle (ici `5`), suivie par le nombre de lettre par ligne/colonne (ici `4`) avec un espace entre les deux.
+
+Le cotenue du puzzle est marquer d'un carré de points ou de lettres. Ces caractère sont séparer d'un espace entre eux en **ligne uniquement**.
+
+Le contenue du puzzle (carré de caractère) doit être placer à **une distance du 1 espace du bord gauche**.
+
+On peut placer des lettre autour du contenue du puzzle, ou un espace si on veut laisser cette partie du bord vide.
+
+**Toutes les lettre doivent être en majuscule** !
 
 ## 🚀 Utilisation
 
-Le logiciel automatise la transformation en DIMACS, l'appel au solveur et l'affichage du résultat.
-
-### Résoudre un puzzle
 
 ```bash
-./build/puzzle_solver --input instances/grille1.abc
-
-```
-
-### Trouver une deuxième solution
-
-Conformément au sujet, le programme peut chercher une solution alternative en niant la première.
-
-```bash
-./build/puzzle_solver --input instances/grille1.abc --all
-
+usage: [-options] [puzzle.data] | optional, outputed files path: (puzzle.dimacs) (sat.txt) (result.txt)
 ```
 
 ## 🧠 Architecture et Modélisation
 
-* 
-**Variables** : Utilisation de variables propositionnelles $X_{ijl}$ pour représenter la présence de la lettre $l$ en $(i, j)$.
+* **Variables** : Utilisation de variables propositionnelles $X_{ijl}$ pour représenter la présence de la lettre $l$ en $(i, j)$.
 
 
-* 
-**Clauses** : Transformation des contraintes *atleast* et *atmost* en clauses logiques.
+* **Clauses** : Transformation des contraintes *atleast* et *atmost* en clauses logiques.
 
 
-* 
-**Solveur** : Utilisation de [Glucose/SAT4J/python-sat] pour traiter l'ensemble des clauses.
-
+* **Solveur** : Utilisation de [Glucose/SAT4J/python-sat] pour traiter l'ensemble des clauses.
 
 
 ## 🧪 Tests et Validation
