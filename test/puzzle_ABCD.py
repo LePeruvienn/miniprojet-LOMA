@@ -14,15 +14,13 @@ __INIT_TEST__(TEST_NAME, TEST_DESC)
 ################################################
 
 PUZZLE = """#Puzzle easy
-6 5
-     B A A E
- . . . . . .E
-D. . . . . .A
-C. . . . . .
-E. . . . . .D
- . . . . . .
- . . . . . .C
- B A   C   C
+4 4
+ D C B A
+D. . . .A
+C. . . .B
+A. . . .D
+B. . . .C
+ B A D C
 """
 
 puzzle_path = os.path.join(INPUT_DIR, "puzzle_tmp.data")
