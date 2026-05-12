@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
 	
@@ -14,6 +15,25 @@ typedef struct {
 } sat_result ;
 
 unsigned int nb_solution_found = 0;
+
+char* append_2_to_filepath(char* old_path)
+{
+	unsigned int new_path_size = 256 * sizeof(char);
+	char* new_path = malloc(new_path_size);
+	char* dot = strrchr(old_path, '.');
+
+	if (dot != NULL)
+	{
+		int base_len = (int) (dot - old_path);
+		snprintf(new_path, new_path_size, "%.*s_2%s", base_len, old_path, dot);
+	}
+	else
+	{
+		snprintf(new_path, new_path_size, "%s_2", old_path);
+	}
+
+	return new_path;
+}
 
 sat_result find_solution(config conf, puzzle p)
 {
@@ -72,6 +92,7 @@ int main(int argc, char** argv)
 	if (s == NULL)
 	{
 		perror("Failed to create solver");
+		free_puzzle(p);
 		return 11;
 	}
 
@@ -86,12 +107,19 @@ int main(int argc, char** argv)
 	if (res.status != SAT)
 	{
 		printf("\nResults: No solution found :(\n");
+		free_solver(s);
+		free(res.result);
 		return nb_solution_found;
 	}
 
 	++nb_solution_found;
 
 	printf("\n>>> Trying to find second solution ...\n\n");
+
+	// Change current result path to second result.txt and sat.txt
+	conf.result_path = append_2_to_filepath(conf.result_path);
+	conf.sat_path = append_2_to_filepath(conf.sat_path);
+	conf.dimacs_path = append_2_to_filepath(conf.dimacs_path);
 
 	deny_solution(s, res.result, get_size(p));
 	write_dimacs(s, conf.dimacs_path);
@@ -109,6 +137,11 @@ int main(int argc, char** argv)
 	}
 
 	free_solver(s);
+
+	free(conf.dimacs_path);
+	free(conf.sat_path);
+	free(conf.result_path);
+
 	free(res.result);
 	free(res2.result);
 
