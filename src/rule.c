@@ -136,6 +136,8 @@ void make_rule_letter_border_no_empty(cnf c, unsigned int puzzle_size, letter l,
 
 void make_rule_letter_border_with_empty(cnf c, unsigned int puzzle_size, unsigned int empty_space_size, letter l, edge e, unsigned int edge_index)
 {
+	lit* lits_let = malloc(sizeof(lit) * (empty_space_size + 1));
+
 	for (unsigned int i = 0; i <= empty_space_size; ++i)
 	{
 		for (unsigned j = 0; j < i; ++j)
@@ -155,7 +157,14 @@ void make_rule_letter_border_with_empty(cnf c, unsigned int puzzle_size, unsigne
 		add_lit(c, var_letter_pos);
 
 		end_clause(c);
+
+		lits_let[i] = var_letter_pos;
 	}
+
+	// Sécurité, peut être pas nécessaire ? Je pense qu'il y a plus propre mais bon
+	atLeastOne(c, lits_let, empty_space_size + 1);
+
+	free(lits_let);
 }
 
 void make_rule_preplaced_letters(cnf c, unsigned int puzzle_size, unsigned int letter_amount, puzzle p)
