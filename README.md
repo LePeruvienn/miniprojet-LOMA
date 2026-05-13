@@ -3,13 +3,15 @@
 
 Développement un solveur pour les puzzle de type "Easy as ABC".
 
+Consulter le rapport : [Rapport.pdf](https://github.com/LePeruvienn/miniprojet-LOMA/blob/main/Rapport.pdf)
+
 ## 📖 Sommaire
-1. [Présentation du Projet](#🎯-présentation-du-projet)
-2. [Installation et Compilation](#🛠️-installation-et-compilation)
-3. [Format de Fichier](#📄-format-de-fichier)
-4. [Modélisation SAT du puzzle](#🔢-modélisation-sat-du-puzzle)
-5. [Utilisation du Logiciel](#🚀-utilisation-du-logiciel)
-6. [Tests Python](#🐍-tests-python)
+1. [Présentation du Projet](#-présentation-du-projet)
+2. [Installation et Compilation](#-installation-et-compilation)
+3. [Format de Fichier](#-format-de-fichier)
+4. [Modélisation SAT du puzzle](#-modélisation-sat-du-puzzle)
+5. [Utilisation du Logiciel](#-utilisation-du-logiciel)
+6. [Tests Python](#-tests-python)
 
 
 ## 🎯 Présentation du Projet
@@ -102,10 +104,15 @@ Deux cas se présente :
 
 1. Si il n'y a pas de cases vide possible alors on ajoute juste la variable $X_{ij\ell}$  du bord de l'écran aux clauses.
 
-2. Si il peut avoir des cases vide :
-   - Si la case $i$ est la première case non-vide en partant du bord, alors elle contient obligatoirement $L$.
-     - Logique : $(\text{Cases précédentes vides} \land \text{Case } i \text{ non-vide}) \implies \text{Case } i \text{ est } L$.
-     - CNF : $(\neg E_0 \lor \neg E_1 \lor \dots \lor \neg E_{i-1} \lor E_i \lor L_i)$.
+2. Si il peut avoir des cases vide, on doit créer une règle spécifique pour les cases dans la continuité de la bordure avec $N$ le nombre de cases vides possibles. Pour chaque case $i$ de $0$ à $N$, on ajoute la clause :
+
+$$ (\neg E_{0,j}  \lor \neg E_{1,j} \lor \dots \lor \neg E{i-1} \lor E_{i,j} \lor L_{i,j}) $$
+
+Cette clause garantit que si toutes les cases précédant $i$ sont vides et que la case $i$ n'est pas vide, alors elle contient obligatoirement la lettre $L$.
+
+Pour ce code on rajoute par sécurité, qui est de forcer l'apparition de la lettre dans au moins une des N case près du bord :
+
+$$ (\neg E_{0,j} \lor \neg E_{1,j} \lor \dots \lor \neg E_{i-1,j} \lor E_{i,j} \lor L_{i,j}) $$
 
 
 #### Lettres Pré-placés
