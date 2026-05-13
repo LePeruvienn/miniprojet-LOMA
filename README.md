@@ -3,6 +3,8 @@
 
 Développement un solveur pour les puzzle de type "Easy as ABC".
 
+Consulter le rapport : [Rapport.pdf](https://github.com/LePeruvienn/miniprojet-LOMA/blob/main/Rapport.pdf)
+
 ## 📖 Sommaire
 1. [Présentation du Projet](#-présentation-du-projet)
 2. [Installation et Compilation](#-installation-et-compilation)
