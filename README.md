@@ -222,3 +222,9 @@ Description      : Essaye de trouver une solution pour tout les puzzles se trouv
 DONE !
 Runned 9 tests, 0 failed, 11 solutions founded !
 ```
+
+**IMPORTANT** : Pour que les test marche, lancer les depuis la racine du projet !
+
+---
+
+Merci d'avoir lu ☀️ !
