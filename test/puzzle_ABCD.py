@@ -7,8 +7,8 @@ from __TEST_CONFIG__ import INPUT_DIR
 from __TEST_CONFIG__ import OUT_DIR
 from __TEST_CONFIG__ import PROGRAM
 
-TEST_NAME = "Puzzle easy"
-TEST_DESC = f"Essaye de resoudre un puzzle de variante easy"
+TEST_NAME = "Puzzle ABCD"
+TEST_DESC = f"Essaye de resoudre un puzzle de variante ABCD"
 __INIT_TEST__(TEST_NAME, TEST_DESC)
 
 ################################################

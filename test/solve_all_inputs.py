@@ -31,7 +31,7 @@ for file_name in puzzle_files:
 	rcode = r.returncode
 	is_test_ok = rcode in (0, 1, 2)
 
-	print(f" [ {file_name} ] \t: {'OK !\t number of solution =' if is_test_ok else 'FAILED !\t return code ='} {rcode}")
+	print(f" [ {file_name} ] : {'OK ! number of solution =' if is_test_ok else 'FAILED ! return code ='} {rcode}")
 
 	puzzle_amount += 1
 
